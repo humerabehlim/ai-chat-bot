@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { SyncLoader } from "react-spinners";
@@ -39,15 +39,27 @@ function App() {
     // we have given the prompt to the model and it will generate the response
     const result = await model.generateContent(prompt);
     // we will get the response from the model
-    console.log(result.response.text());
+    // console.log(result.response.text());
     // ... spread operator is used to copy the previous response and add the new response
-    setResponse([
+    const newResponse = [
       ...response,
       { prompt: prompt, response: result.response.text() },
-    ]);
+    ]
+    setResponse(newResponse);
     setPrompt("");
     setLoading(false);
+    // save the response in the local storage
+    localStorage.setItem('chatbotResponse', JSON.stringify(newResponse));
   }
+
+
+  useEffect(()=>{
+  // get the response from the local storage
+   const data =  localStorage.getItem('chatbotResponse');
+    if(data){
+      setResponse(JSON.parse(data));
+    }
+  },[])
 
   return (
     <>
@@ -55,7 +67,7 @@ function App() {
       <div className="chatbot_container">
         <div className="chatbot_response_container">
           {/* map to show the data from the response array state */}
-          {response.map((res, index) => (
+          {response?.map((res, index) => (
             <div key={index} className="response">
               <p className="chatbot_prompt">
                 <strong>user : </strong> {res.prompt}
