@@ -1,6 +1,13 @@
 import { useState } from "react";
 import "./App.css";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { SyncLoader } from "react-spinners";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
 
 function App() {
   const apiKey = import.meta.env.VITE_API_GEMINI_KEY;
@@ -17,10 +24,13 @@ function App() {
     {
       prompt: "Hi, how can I help you today?",
       response: "I am a chatbot, ask me anything.",
-    }
+    },
   ]);
 
+  let [loading, setLoading] = useState(false);
+
   async function fetchChatResponseFromGemini() {
+    setLoading(true);
     // create an instance of the GoogleGenerativeAI
     const genAI = new GoogleGenerativeAI(apiKey);
     // we have selected the model "gemini-1.5-flash"
@@ -35,6 +45,8 @@ function App() {
       ...response,
       { prompt: prompt, response: result.response.text() },
     ]);
+    setPrompt("");
+    setLoading(false);
   }
 
   return (
@@ -46,13 +58,24 @@ function App() {
           {response.map((res, index) => (
             <div key={index} className="response">
               <p className="chatbot_prompt">
-                <strong>user:</strong> {res.prompt}
+                <strong>user : </strong> {res.prompt}
               </p>
               <p className="chatbot_response">
-                <strong>chatbot:</strong> {res.response}
+                <strong>chatbot : </strong> {res.response}
               </p>
             </div>
           ))}
+
+          {loading && (
+            <SyncLoader
+              color={"chocolate"}
+              loading={loading}
+              cssOverride={override}
+              size={10}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          )}
         </div>
 
         <div className="chatbot_input">
@@ -61,6 +84,7 @@ function App() {
             name="input"
             placeholder="enter your questions"
             className="input"
+            value={prompt}
             onChange={(e) => {
               setPrompt(e.target.value);
             }}
