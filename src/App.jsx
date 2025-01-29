@@ -12,6 +12,7 @@ function App() {
   const [prompt, setPrompt] = useState("");
 
   // store the response from the user and show on screen using useState
+  // array of object is used to store the prompt and response
   const [response, setResponse] = useState([
     {
       prompt: "Hi, how can I help you today?",
@@ -41,6 +42,7 @@ function App() {
       <h1 className="heading">AI Chat Bot</h1>
       <div className="chatbot_container">
         <div className="chatbot_response_container">
+          {/* map to show the data from the response array state */}
           {response.map((res, index) => (
             <div key={index} className="response">
               <p className="chatbot_prompt">
