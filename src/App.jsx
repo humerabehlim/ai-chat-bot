@@ -70,10 +70,10 @@ function App() {
           {response?.map((res, index) => (
             <div key={index} className="response">
               <p className="chatbot_prompt">
-                <strong>user : </strong> {res.prompt}
+              {res.prompt}
               </p>
               <p className="chatbot_response">
-                <strong>chatbot : </strong> {res.response}
+               {res.response}
               </p>
             </div>
           ))}
