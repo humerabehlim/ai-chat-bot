@@ -22,7 +22,7 @@ function App() {
   // array of object is used to store the prompt and response
   const [response, setResponse] = useState([
     {
-      prompt: "Hi, how can I help you today?",
+      prompt: "Hello, how can I help you today?",
       response: "I am a chatbot, ask me anything.",
     },
   ]);
