@@ -5,24 +5,19 @@ import { SyncLoader } from "react-spinners";
 
 const override = {
   display: "block",
-  margin: "0 auto",
-  borderColor: "red",
+  margin: "10px",
 };
 
 function App() {
   const apiKey = import.meta.env.VITE_API_GEMINI_KEY;
 
-  // store data use state hook
-  // destructuring the useState into prompt and setPrompt
-  // prompt is the input from the user
-  // setPrompt is the function that used to update the prompt
+  
   const [prompt, setPrompt] = useState("");
 
-  // store the response from the user and show on screen using useState
-  // array of object is used to store the prompt and response
+  
   const [response, setResponse] = useState([
     {
-      prompt: "Hello, how can I help you today?",
+      prompt: "Hi, how can I help you today?",
       response: "I am a chatbot, ask me anything.",
     },
   ]);
@@ -31,16 +26,16 @@ function App() {
 
   async function fetchChatResponseFromGemini() {
     setLoading(true);
-    // create an instance of the GoogleGenerativeAI
+    
     const genAI = new GoogleGenerativeAI(apiKey);
-    // we have selected the model "gemini-1.5-flash"
+   
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    // we have given the prompt to the model and it will generate the response
+    
     const result = await model.generateContent(prompt);
-    // we will get the response from the model
+    
     // console.log(result.response.text());
-    // ... spread operator is used to copy the previous response and add the new response
+    
     const newResponse = [
       ...response,
       { prompt: prompt, response: result.response.text() },
@@ -48,13 +43,13 @@ function App() {
     setResponse(newResponse);
     setPrompt("");
     setLoading(false);
-    // save the response in the local storage
+    
     localStorage.setItem('chatbotResponse', JSON.stringify(newResponse));
   }
 
 
   useEffect(()=>{
-  // get the response from the local storage
+ 
    const data =  localStorage.getItem('chatbotResponse');
     if(data){
       setResponse(JSON.parse(data));
@@ -63,10 +58,11 @@ function App() {
 
   return (
     <>
-      <h1 className="heading">AI Chat Bot</h1>
+      <h1 className="heading">Orbit AI</h1>
+      <h2 className="subheading">The Ultimate Chat Companion — Ready to Riff, Rhyme, and Reason with You!</h2>
       <div className="chatbot_container">
         <div className="chatbot_response_container">
-          {/* map to show the data from the response array state */}
+          
           {response?.map((res, index) => (
             <div key={index} className="response">
               <p className="chatbot_prompt">
@@ -79,8 +75,8 @@ function App() {
           ))}
 
           {loading && (
-            <SyncLoader
-              color={"chocolate"}
+            <SyncLoader className="chatbot_response"
+              color={"#ffffff"}
               loading={loading}
               cssOverride={override}
               size={10}
@@ -94,14 +90,14 @@ function App() {
           <input
             type="text"
             name="input"
-            placeholder="enter your questions"
+            placeholder="Enter your questions"
             className="input"
             value={prompt}
             onChange={(e) => {
               setPrompt(e.target.value);
             }}
           />
-          <button type="button" onClick={fetchChatResponseFromGemini}>
+          <button className="button"type="button" onClick={fetchChatResponseFromGemini}>
             submit
           </button>
         </div>
