@@ -322,7 +322,7 @@ body {
   }
 
   .chatbot_input, .button {
-    width: 50%;
+    width: 90%;
     margin: 5px auto;
   }
 }
